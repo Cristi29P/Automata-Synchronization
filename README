@@ -1,0 +1,74 @@
+Exercitiul 1 (accessible):
+    Trebuie sa gasim toate starile accesibile din starile date ca multime de
+intrare. In acest sens, cel mai usor este sa facem o parcurgere DFS din fiecare
+stare de intrare. Dupa ce am parcurs toate starile, ne uitam in map-ul de
+noduri vizitate si le printam pe toate cele care apar ca fiind vizitate (deci
+accesibile, deoarece DFS a putut sa ajunga in ele).
+
+Exercitiul 2 (productive):
+    Ideea este similara ca la exercitiul 1, numai ca inainte de a aplica DFS pe
+nodurile date la intrare (care de aceasta data reprezinta noduri de stari
+finale), avem grija ca la citire sa inversam graful si legaturile pe simboluri
+dintre noduri, pentru a reduce in acest fel aceasta problema la accessible.
+
+Exercitiul 3 (useful):
+    Ideea acestui exercitiu este ca facem prima data partea de accessible pe 
+starile date ca stari initiale si apoi partea de productive pe starile date ca
+stari finale. Dupa ce am obtinut vectorii de vizitati, ii intersectam, deoarece
+in acest fel ne-am asigurat ca toate starile obtinute au fost si accessible si 
+productive.
+
+NOTA: Am ales sa fac fiecare exercitiu intr-o functie separata ca sa evidentiez
+exact toti pasii.
+
+Exercitiul 4 (sync): (Toate sync-urile au fost facute intr-o singura functie)
+    Ideea acestui exercitiu este ca, prin parcurgeri repetate ale grafului, sa
+ajungem sa gasim o secventa care sincronizeaza tot automatul dupa cum se cere 
+in enunt.
+    Algoritmul incepe prin citirea grafului si a starilor initiale. De notat
+este faptul ca, daca problema data este de sincronizare generala (s = 0, 
+f = 0), multimea de stari initiale este reprezentata de toate nodurile din
+graf. Altfel, starile initiale sunt cele 's' stari de pornire.
+    Dupa citire, incercam sa minizam multimea starilor prin parcurgeri repetate
+pana cand mai avem o singura stare (asta ar insemna ca toate starile converg pe
+secventa gasita in acesta unica stare si automatul ar fi sincronizat). In acest
+sens, alegem primele doua stari din multime si incercam sa gasim o secventa
+care le duce intr-o stare comuna. In acest sens, aplicam un DFS care merge 
+simultan din cele doua noduri pana cand ambele parcurgeri ajung in acelasi nod.
+In tot acest timp, noi tranzitionam din ambele noduri cu aceleasi simboluri si
+salvam simbolurile folosite intr-o secventa partiala.
+    Dupa ce prima parcurgere se termina, luam restul de noduri din care nu am
+aplicat DFS si aplicam secventa gasita. Aplicarea secventei va tranzitiona
+va fiecare stare intr-o alta stare pe care o salvam intr-un set pentru a nu
+admite duplicate. Asupra noilor stari obtinute este aplicat din nou Algoritmul
+precedent si avem grija ca de fiecare data cand aplicam noua secventa pe 
+starile ramase sa o si printam la consola.
+    In acest punct s-ar termina algoritmul pentru sincronizare generala si 
+sincronizare partiala. Daca problema insa are ca parametru 'f != 0', atunci 
+se mai aplica o parcurgere DFS (o parcurgere normala) avand ca sursa unicul nod
+ramas in multimea de stari dupa algoritmul de mai sus si ca destinatie un nod
+din multimea de stari finale. Nodul ramas dupa aplicarea algoritmului de sincro-
+nizare generala/partiala ne spune ca din orice stare am pleca si cu secventa pe
+care am gasit-o, putem converge in acesta. Nodul din multimea de stari finale
+reprezinta o ultima restrictie care ne spune ca toate nodurile trebuie sa 
+ajunga intr-un nod din multimea de stari finale. De aceea, acest ultim DFS
+aplicat ne va mai genera o subsecventa care va duce la indeplinirea acestei
+conditii.
+
+Exercitiul 5: (Labirint)
+    Ideea acestui exercitiu este sa luam codificarea labirintului si sa generam
+un automat similar cu cele date ca input la exercitiile predente. Astfel,
+pentru a vedea care sunt starile vecine starii curente si pe ce simboluri
+tranzitionam pentru a ajunge in acestea, luam numerele date ca input in matrice.
+Le codificam in binar pe 4 biti si apoi testam individual fiecare bit pentru a
+vedea in ce directie exista zid sau nu. Daca un bit este 0, atunci putem afla
+pe baza pozitiei (i, j) a nodului curent, care este indexul nodului vecin, avand
+ca simbol de tranzitie catre acesta indexul bitului pe care l-am testat (de la 
+LSB (0) la MSB (3)). Astfel, vom avea mereu 4 simbuluri in toate automatele,
+acestea codificand directiile unde nu sunt ziduri si avem vecini. De exemplu,
+daca suntem la pozitia (1, 2) si bitul de pe pozitia 0 din numarul dat este 0,
+inseamna ca la EST nu avem zid si exista un vecin pe care putem sa tranzitionam
+pe simbulul 0 (index-ul). Vecinul este la coordonata (1 + 1, 2), deoarece ne
+miscam cu o coloana la dreapta in matrice, iar indexul lui este 
+2 * lungime_rand + coloana.
+    Similar vom proceda si calcula pozitiile robotilor si ale iesirilor.
